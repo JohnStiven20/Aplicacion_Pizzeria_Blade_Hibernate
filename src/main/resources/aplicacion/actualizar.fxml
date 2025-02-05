@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="237.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_base_datos.ActualizarController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="69.0" prefWidth="388.0">
+         <children>
+            <VBox>
+               <children>
+                  <Label prefHeight="17.0" prefWidth="50.0" text="Nombre" />
+                  <TextField fx:id="nombre" />
+               </children>
+            </VBox>
+         </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="70.0" prefWidth="388.0">
+         <children>
+            <VBox>
+               <children>
+                  <Label text="Distrito" />
+                  <TextField fx:id="distrito" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="67.0" prefWidth="388.0">
+         <children>
+            <VBox>
+               <children>
+                  <Label text="Poblacion" />
+                  <TextField fx:id="poblacion" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT" prefHeight="79.0" prefWidth="237.0" spacing="10.0">
+         <children>
+            <Button fx:id="confirmar" mnemonicParsing="false" onAction="#confirmar" text="Actualizar" />
+            <Button fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets right="20.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

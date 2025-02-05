@@ -1,0 +1,83 @@
+/* 🎨 Fondo general en tono oscuro */
+.root {
+    -fx-background-color: #1e1e1e;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+}
+
+/* 🟦 Estilo para HBox con fondo oscuro y bordes suaves */
+.hbox {
+    -fx-background-color: #252526;
+    -fx-border-color: #2a2d2e;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 15px;
+    -fx-spacing: 10;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 5, 0, 2, 2);
+}
+
+/* 🟪 Estilo para VBox */
+.vbox {
+    -fx-padding: 10px;
+    -fx-spacing: 10;
+}
+
+/* ✨ Estilo para Labels con color claro */
+.label {
+    -fx-text-fill: #d0d0d0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* 📝 TextFields en tonos oscuros */
+.text-field {
+    -fx-background-color: #2d2d30;
+    -fx-border-color: #444;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #e0e0e0;
+}
+
+.text-field:focused {
+    -fx-border-color: #4c9cff; /* Azul neón al enfocar */
+    -fx-border-width: 2px;
+}
+
+
+
+/* 🔵 Botones con efecto neón */
+.button {
+    -fx-background-color: #007acc;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+    -fx-pref-height: 35px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 122, 204, 0.5), 10, 0, 0, 0);
+}
+
+.button:hover {
+    -fx-background-color: #005f99;
+}
+
+.button:pressed {
+    -fx-background-color: #003f66;
+}
+
+/* 🔲 Espaciado */
+.vbox, .hbox {
+    -fx-spacing: 10;
+}
+
+.hbox {
+    -fx-alignment: center;
+}
+
+.vbox {
+    -fx-padding: 10px;
+}
