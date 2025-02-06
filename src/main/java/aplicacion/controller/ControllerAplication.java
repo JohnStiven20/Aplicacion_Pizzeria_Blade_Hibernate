@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.google.gson.Gson;
-
 import aplicacion.modelo.Coche;
 import aplicacion.services.CocheService;
 import javafx.application.Platform;
@@ -18,15 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class ControllerAplication implements Initializable {
 
@@ -45,11 +40,9 @@ public class ControllerAplication implements Initializable {
 
     private Coche coche;
     private ObservableList<Coche> coches;
-    private CocheService cocheService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        cocheService = new CocheService();
         coches = FXCollections.observableArrayList();
         cargarCoches();
         tableView.getSelectionModel().selectedItemProperty().addListener((oyente, viejo, nuevo) -> {
@@ -62,17 +55,15 @@ public class ControllerAplication implements Initializable {
     @FXML
     private void cargarCoches() {
         new Thread(() -> {
+
             try {
                 List<Coche> respuesta = CocheService.getAllCoches();
 
-                // Actualizar UI en el hilo de JavaFX
                 Platform.runLater(() -> {
-                    // Convertir lista a ObservableList
                     coches = FXCollections.observableArrayList(respuesta);
 
-                    // Definir columnas de la tabla
-                    String[] campos = {"id", "Matricula", "Marca", "Modelo", "Fecha"};
-                    double[] minAnchos = {25, 100, 100, 100, 200};
+                    String[] campos = { "id", "Matricula", "Marca", "Modelo", "Fecha" };
+                    double[] minAnchos = { 25, 100, 100, 100, 200 };
 
                     tableView.getColumns().clear();
 
@@ -101,7 +92,6 @@ public class ControllerAplication implements Initializable {
                         tableView.getColumns().add(finalTableColumn);
                     }
 
-                    // Asignar la lista actualizada a la tabla
                     tableView.setItems(coches);
                 });
 
@@ -111,7 +101,7 @@ public class ControllerAplication implements Initializable {
         }).start();
     }
 
-    public void cambiarSelecionado(Coche coche) {
+    public void cambiarSelecionado(@SuppressWarnings("exports") Coche coche) {
         if (coche != null) {
             modelo.setText(coche.getModelo());
             matricula.setText(coche.getMatricula());
@@ -140,16 +130,22 @@ public class ControllerAplication implements Initializable {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.showAndWait();
+        
+            int estado = insertarController.getEstado();
 
-            new Thread(() -> {
+            if (estado == 1) {
+                new Thread(() -> {
 
-                Coche ciudadNueva = insertarController.getCoche();
+                    Coche ciudadNueva = insertarController.getCoche();
+    
+                    CocheService.addCoche(ciudadNueva);
+    
+                    cargarCoches();
+    
+                }).start();
+            }
 
-                CocheService.addCoche(ciudadNueva);
-
-                cargarCoches();
-
-            }).start();
+            
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -158,19 +154,70 @@ public class ControllerAplication implements Initializable {
     }
 
     public void borrar() {
-        new Thread(() -> {
-            int opcion = CocheService.delete(this.coche);
 
-            if (opcion == 1) {
-                cargarCoches();
-            }
-        }).start();
+        if (this.coche != null) {
+
+            new Thread(() -> {
+                int opcion = CocheService.delete(this.coche);
+
+                if (opcion == 1) {
+                    cargarCoches();
+                }
+            }).start();
+
+        } else {
+
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Tiene que pinchar en la tabla un coche");
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.showAndWait();
+
+        }
     }
 
-    // public void actualizar() {
-    //     if (coche != null) {
-    //         Coche ciudadActualizada = cocheDao.actualizar(coche);
-    //         cargarCoches();
-    //     }
-    // }
+    @FXML
+    public void actualizar() {
+
+        if (this.coche != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aplicacion/actualizar.fxml"));
+
+            try {
+
+                Parent parent = loader.load();
+                ActualizarController actualizarController = loader.getController();
+                Scene scene = new Scene(parent);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                actualizarController.setCoche(this.coche);
+                stage.showAndWait();
+
+                new Thread(() -> {
+
+                    Coche cocheNuevo = actualizarController.getCoche();
+                    int estado = actualizarController.getEstado();
+                    System.out.println(cocheNuevo.toString() + " ACTUALIZAR");
+
+                    if (estado == 1) {
+                        CocheService.updateCoche(cocheNuevo);
+                        cargarCoches();
+                        System.out.println("VIVA ESPAÑA");
+                    }
+
+                }).start();
+
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Tiene que pinchar en la tabla un coche");
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.showAndWait();
+
+        }
+
+    }
 }

@@ -7,52 +7,43 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="237.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto_base_datos.ActualizarController">
-   <children>
-      <HBox alignment="CENTER" prefHeight="69.0" prefWidth="388.0">
-         <children>
-            <VBox>
-               <children>
-                  <Label prefHeight="17.0" prefWidth="50.0" text="Nombre" />
-                  <TextField fx:id="nombre" />
-               </children>
-            </VBox>
-         </children>
-         <VBox.margin>
-            <Insets top="10.0" />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="70.0" prefWidth="388.0">
-         <children>
-            <VBox>
-               <children>
-                  <Label text="Distrito" />
-                  <TextField fx:id="distrito" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="67.0" prefWidth="388.0">
-         <children>
-            <VBox>
-               <children>
-                  <Label text="Poblacion" />
-                  <TextField fx:id="poblacion" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_RIGHT" prefHeight="79.0" prefWidth="237.0" spacing="10.0">
-         <children>
-            <Button fx:id="confirmar" mnemonicParsing="false" onAction="#confirmar" text="Actualizar" />
-            <Button fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <padding>
-            <Insets right="20.0" />
-         </padding>
-      </HBox>
-   </children>
+<VBox alignment="CENTER" prefHeight="313.0" prefWidth="224.0" spacing="10" stylesheets="@estilo.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aplicacion.controller.ActualizarController">
+    <!-- Definición de padding mediante un objeto Insets -->
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+    
+    <children>
+        <!-- Fila para "Matricula": etiqueta y campo de texto -->
+        <VBox alignment="CENTER_LEFT" spacing="5">
+            <children>
+                <Label text="Matricula" />
+                <TextField fx:id="matricula" promptText="Ingrese la matricula" />
+            </children>
+        </VBox>
+
+        <!-- Fila para "Modelo": etiqueta y campo de texto -->
+        <VBox alignment="CENTER_LEFT" spacing="5">
+            <children>
+                <Label text="Modelo" />
+                <TextField fx:id="modelo" promptText="Ingrese el modelo" />
+            </children>
+        </VBox>
+
+        <!-- Fila para "Marca": etiqueta y campo de texto -->
+        <VBox alignment="CENTER_LEFT" spacing="5">
+            <children>
+                <Label text="Marca" />
+                <TextField fx:id="marca" promptText="Ingrese la marca" />
+            </children>
+        </VBox>
+
+        <!-- Fila de botones alineados a la derecha -->
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="53.0" prefWidth="184.0" spacing="10">
+            <children>
+                <Button fx:id="confirmar" mnemonicParsing="false" onAction="#confirmar" text="Actualizar" />
+                <Button fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+            </children>
+        </HBox>
+    </children>
 </VBox>

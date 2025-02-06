@@ -7,12 +7,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import aplicacion.controller.InsertarController;
 import aplicacion.modelo.Coche;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -112,6 +107,34 @@ public class CocheService {
         } catch (IOException e) {
             e.printStackTrace();
             return  0;
+        }
+
+    }
+
+    public static void updateCoche(Coche coche) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(coche);
+        System.out.println(coche.toString());
+
+        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+
+        Request request = new Request.Builder()
+                .url("http://localhost:9001/api/cochesL")
+                .put(body)
+                .build();
+
+        Call call = cliente.newCall(request);
+
+        try (Response response = call.execute()) {
+            if (response.isSuccessful()) {
+                System.out.println("Dado de alta");
+            } else {
+                System.out.println("Se ha producido un error");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

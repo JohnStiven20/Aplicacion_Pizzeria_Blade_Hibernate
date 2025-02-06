@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="890.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aplicacion.controller.ControllerAplication">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="890.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aplicacion.controller.ControllerAplication">
    
    <children>
       <!-- Sección superior - Búsqueda -->
@@ -73,7 +73,7 @@
             <!-- Se asigna la propiedad AnchorPane.rightAnchor como atributo del HBox -->
             <HBox alignment="CENTER" prefHeight="45.0" prefWidth="326.0" spacing="10" AnchorPane.rightAnchor="0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#cargarCoches" text="Actualizar" />
+                  <Button mnemonicParsing="false" onAction="#actualizar" text="Actualizar" />
                   <Button mnemonicParsing="false" onAction="#borrar" text="Borrar" />
                   <Button mnemonicParsing="false" onAction="#insertar" text="Insertar" />
                </children>
