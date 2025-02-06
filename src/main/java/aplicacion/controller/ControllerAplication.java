@@ -1,8 +1,11 @@
 package aplicacion.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import com.google.gson.Gson;
 
 import aplicacion.modelo.Coche;
 import aplicacion.services.CocheService;
@@ -11,10 +14,19 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ControllerAplication implements Initializable {
 
@@ -31,7 +43,6 @@ public class ControllerAplication implements Initializable {
     @FXML
     private TextField id;
 
-
     private Coche coche;
     private ObservableList<Coche> coches;
     private CocheService cocheService;
@@ -41,7 +52,11 @@ public class ControllerAplication implements Initializable {
         cocheService = new CocheService();
         coches = FXCollections.observableArrayList();
         cargarCoches();
-        tableView.getSelectionModel().selectedItemProperty().addListener((oyente, viejo, nuevo) -> cambiarSelecionado(nuevo));
+        tableView.getSelectionModel().selectedItemProperty().addListener((oyente, viejo, nuevo) -> {
+            cambiarSelecionado(nuevo);
+            this.coche = nuevo;
+        });
+
     }
 
     @FXML
@@ -56,8 +71,8 @@ public class ControllerAplication implements Initializable {
                     coches = FXCollections.observableArrayList(respuesta);
 
                     // Definir columnas de la tabla
-                    String[] campos = { "id", "Matricula", "Marca", "Modelo", "Fecha" };
-                    double[] minAnchos = { 25, 100, 100, 100, 200 };
+                    String[] campos = {"id", "Matricula", "Marca", "Modelo", "Fecha"};
+                    double[] minAnchos = {25, 100, 100, 100, 200};
 
                     tableView.getColumns().clear();
 
@@ -91,7 +106,7 @@ public class ControllerAplication implements Initializable {
                 });
 
             } catch (Exception e) {
-               e.printStackTrace();
+                System.out.println("VIVA ESPAÑA");
             }
         }).start();
     }
@@ -103,7 +118,6 @@ public class ControllerAplication implements Initializable {
             marca.setText(coche.getMarca());
             date.setText(coche.getDate() + "");
             id.setText(coche.getId() + "");
-
         } else {
             modelo.setText("");
             matricula.setText("");
@@ -113,19 +127,45 @@ public class ControllerAplication implements Initializable {
         }
     }
 
-    // public void borrar() {
-    //     int opcion = cocheDao.borrar(coche);
+    @FXML
+    public void insertar() {
 
-    //     if (opcion == 1) {
-    //         cargarCoches();
-    //     }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/aplicacion/insertar.fxml"));
 
-    // }
+        try {
 
-    // public void guardar() {
-    //     cocheService.addCoche(coche);
-    //     cargarCoches();
-    // }
+            Parent parent = loader.load();
+            InsertarController insertarController = loader.getController();
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            new Thread(() -> {
+
+                Coche ciudadNueva = insertarController.getCoche();
+
+                CocheService.addCoche(ciudadNueva);
+
+                cargarCoches();
+
+            }).start();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public void borrar() {
+        new Thread(() -> {
+            int opcion = CocheService.delete(this.coche);
+
+            if (opcion == 1) {
+                cargarCoches();
+            }
+        }).start();
+    }
 
     // public void actualizar() {
     //     if (coche != null) {
@@ -133,5 +173,4 @@ public class ControllerAplication implements Initializable {
     //         cargarCoches();
     //     }
     // }
-
 }
