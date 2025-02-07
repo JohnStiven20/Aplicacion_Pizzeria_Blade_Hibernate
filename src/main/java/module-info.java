@@ -9,11 +9,9 @@ module aplicacion {
     requires javafx.graphics;
 
     
-    // Abre paquetes específicos para acceso reflexivo
     opens aplicacion.controller to javafx.fxml;
     opens aplicacion.modelo to com.google.gson;
 
-    // Exporta los paquetes necesarios
     exports aplicacion;
     exports aplicacion.controller;
 }

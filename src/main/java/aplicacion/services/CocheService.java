@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import aplicacion.modelo.Coche;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,12 +22,11 @@ public class CocheService {
 
     private static final OkHttpClient cliente = new OkHttpClient();
 
-    public static void addCoche(Coche coche) {
-
+    public static boolean addCoche(Coche coche) {
         Gson gson = new Gson();
         String json = gson.toJson(coche);
 
-        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+        RequestBody body = RequestBody.create(json, MediaType.get("application/json"));
 
         Request request = new Request.Builder()
                 .url("http://localhost:9001/api/coche")
@@ -35,16 +37,30 @@ public class CocheService {
         Call call = cliente.newCall(request);
 
         try (Response response = call.execute()) {
-            if (response.isSuccessful()) {
-                System.out.println("Dado de alta");
+            boolean success = response.isSuccessful();
+            String errorMessage = success ? "Dado de alta" :
+            (response.body() != null ? response.body().string() : "Error desconocido");
+
+            if (success) {
+                System.out.println(errorMessage);
+                return true;  
             } else {
-                System.out.println("Se ha producido un error");
+                String finalErrorMessage = errorMessage;
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText(finalErrorMessage);
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                });
+                cliente.connectionPool().evictAll();
+                return false; 
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return false;
     }
 
     public static List<Coche> getAllCoches() {
@@ -89,7 +105,7 @@ public class CocheService {
         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 
         Request request = new Request.Builder()
-                .url("http://localhost:9001/api/coche/delete")
+                .url("http://localhost:9001/api/coche")
                 .delete(body)
                 .build();
 
@@ -106,7 +122,7 @@ public class CocheService {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return  0;
+            return 0;
         }
 
     }
@@ -120,23 +136,36 @@ public class CocheService {
         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 
         Request request = new Request.Builder()
-                .url("http://localhost:9001/api/cochesL")
+                .url("http://localhost:9001/api/coche")
                 .put(body)
                 .build();
 
         Call call = cliente.newCall(request);
+        
 
         try (Response response = call.execute()) {
+
+            boolean success = response.isSuccessful();
+            String errorMessage = success ? "Dado de alta" :
+            (response.body() != null ? response.body().string() : "Error desconocido");
+
             if (response.isSuccessful()) {
                 System.out.println("Dado de alta");
             } else {
-                System.out.println("Se ha producido un error");
+
+                String finalErrorMessage = errorMessage;
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText(finalErrorMessage);
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                });
+                cliente.connectionPool().evictAll();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 }
