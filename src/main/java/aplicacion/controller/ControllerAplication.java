@@ -96,7 +96,7 @@ public class ControllerAplication implements Initializable {
                 });
 
             } catch (Exception e) {
-                System.out.println("VIVA ESPAÑA");
+                System.out.println(e.getMessage());
             }
         }).start();
     }
@@ -198,7 +198,6 @@ public class ControllerAplication implements Initializable {
 
                     Coche cocheNuevo = actualizarController.getCoche();
                     int estado = actualizarController.getEstado();
-                    System.out.println(cocheNuevo.toString() + " ACTUALIZAR");
 
                     if (estado == 1) {
                         CocheService.updateCoche(cocheNuevo);

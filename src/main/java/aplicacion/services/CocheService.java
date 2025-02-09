@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import aplicacion.modelo.Coche;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -37,18 +36,13 @@ public class CocheService {
         Call call = cliente.newCall(request);
 
         try (Response response = call.execute()) {
-            boolean success = response.isSuccessful();
-            String errorMessage = success ? "Dado de alta" :
-            (response.body() != null ? response.body().string() : "Error desconocido");
-
-            if (success) {
-                System.out.println(errorMessage);
+            
+            if (response.isSuccessful()) {
                 return true;  
             } else {
-                String finalErrorMessage = errorMessage;
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText(finalErrorMessage);
+                    alert.setContentText(response.body().toString());
                     alert.setHeaderText(null);
                     alert.showAndWait();
                 });
@@ -88,10 +82,10 @@ public class CocheService {
             }
 
         } catch (SocketException e) {
-            System.out.println("Buenas tardes");
+            e.printStackTrace();
             return null;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -113,10 +107,10 @@ public class CocheService {
 
         try (Response response = call.execute()) {
             if (response.isSuccessful()) {
-                System.out.println("Dado de alta");
+                System.out.println(response.body().toString());
                 return 1;
             } else {
-                System.out.println("Se ha producido un error");
+                System.out.println(response.body().toString());
                 return 0;
             }
 
@@ -142,25 +136,18 @@ public class CocheService {
 
         Call call = cliente.newCall(request);
         
-
         try (Response response = call.execute()) {
 
-            boolean success = response.isSuccessful();
-            String errorMessage = success ? "Dado de alta" :
-            (response.body() != null ? response.body().string() : "Error desconocido");
-
             if (response.isSuccessful()) {
-                System.out.println("Dado de alta");
+                System.out.println(response.body().toString());
             } else {
 
-                String finalErrorMessage = errorMessage;
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText(finalErrorMessage);
+                    alert.setContentText(response.body().toString());
                     alert.setHeaderText(null);
                     alert.showAndWait();
                 });
-                cliente.connectionPool().evictAll();
             }
 
         } catch (IOException e) {
