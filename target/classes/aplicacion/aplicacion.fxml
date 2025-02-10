@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="890.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aplicacion.controller.ControllerAplication">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="890.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aplicacion.controller.ControllerAplication">
    
    <children>
       <!-- Sección superior - Búsqueda -->
@@ -59,6 +59,17 @@
                      <Label text="Fecha" />
                      <TextField fx:id="date" />
                   </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="18.0" prefWidth="189.0" text="Buscador por Matricula" />
+                        <TextField fx:id="encontrarMatricula" />
+                        <HBox spacing="20.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#buscarCoche" text="Buscar" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -71,8 +82,9 @@
       <AnchorPane VBox.vgrow="NEVER">
          <children>
             <!-- Se asigna la propiedad AnchorPane.rightAnchor como atributo del HBox -->
-            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="326.0" spacing="10" AnchorPane.rightAnchor="0">
+            <HBox alignment="CENTER" prefHeight="45.0" prefWidth="454.0" spacing="10" AnchorPane.rightAnchor="0">
                <children>
+                  <Button mnemonicParsing="false" onAction="#cargarCoches" text="Obtener coches" />
                   <Button mnemonicParsing="false" onAction="#actualizar" text="Actualizar" />
                   <Button mnemonicParsing="false" onAction="#borrar" text="Borrar" />
                   <Button mnemonicParsing="false" onAction="#insertar" text="Insertar" />

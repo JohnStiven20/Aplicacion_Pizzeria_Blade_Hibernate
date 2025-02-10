@@ -2,6 +2,8 @@ package aplicacion.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -37,6 +39,8 @@ public class ControllerAplication implements Initializable {
     private TextField date;
     @FXML
     private TextField id;
+    @FXML
+    private  TextField encontrarMatricula;
 
     private Coche coche;
     private ObservableList<Coche> coches;
@@ -49,6 +53,32 @@ public class ControllerAplication implements Initializable {
             cambiarSelecionado(nuevo);
             this.coche = nuevo;
         });
+
+    }
+
+    public  void buscarCoche() {
+
+        if (!this.encontrarMatricula.getText().isBlank()) {
+            new Thread(() -> {
+
+                Coche cocheEncontrado = CocheService.findByMatricula(this.encontrarMatricula.getText());
+
+                if (cocheEncontrado != null) {
+                    Platform.runLater(() -> {
+                        List<Coche> coches = new ArrayList<>(Arrays.asList(cocheEncontrado));
+                        tableView.setItems(FXCollections.observableArrayList(coches));
+                    });
+                }
+                
+            }).start();
+            
+        } else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("El campo esta vacio");
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.showAndWait();
+        }
 
     }
 
@@ -202,7 +232,6 @@ public class ControllerAplication implements Initializable {
                     if (estado == 1) {
                         CocheService.updateCoche(cocheNuevo);
                         cargarCoches();
-                        System.out.println("VIVA ESPAÑA");
                     }
 
                 }).start();
@@ -217,8 +246,8 @@ public class ControllerAplication implements Initializable {
             alert.setHeaderText(null);
             alert.setTitle("Error");
             alert.showAndWait();
-
         }
-
     }
+
+    
 }

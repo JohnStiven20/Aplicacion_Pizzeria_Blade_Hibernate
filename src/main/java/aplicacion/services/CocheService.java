@@ -2,6 +2,8 @@ package aplicacion.services;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -36,9 +38,9 @@ public class CocheService {
         Call call = cliente.newCall(request);
 
         try (Response response = call.execute()) {
-            
+
             if (response.isSuccessful()) {
-                return true;  
+                return true;
             } else {
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -47,7 +49,7 @@ public class CocheService {
                     alert.showAndWait();
                 });
                 cliente.connectionPool().evictAll();
-                return false; 
+                return false;
             }
 
         } catch (IOException e) {
@@ -107,10 +109,8 @@ public class CocheService {
 
         try (Response response = call.execute()) {
             if (response.isSuccessful()) {
-                System.out.println(response.body().toString());
                 return 1;
             } else {
-                System.out.println(response.body().toString());
                 return 0;
             }
 
@@ -135,16 +135,20 @@ public class CocheService {
                 .build();
 
         Call call = cliente.newCall(request);
-        
+
         try (Response response = call.execute()) {
+
+            String respuesta = response.body() != null ? response.body().string() : "Respuesta vacía";
 
             if (response.isSuccessful()) {
                 System.out.println(response.body().toString());
             } else {
 
+                String errorMensaje = respuesta;
+
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setContentText(response.body().toString());
+                    alert.setContentText(errorMensaje);
                     alert.setHeaderText(null);
                     alert.showAndWait();
                 });
@@ -153,6 +157,48 @@ public class CocheService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Coche findByMatricula(String matricula) {
+
+        String url = "http://localhost:9001/api/coche/" + matricula;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        try (Response response = cliente.newCall(request).execute()) {
+
+            String errorMensaje = response.body() != null ? response.body().string() : "Error desconocido";
+
+            if (response.isSuccessful()) {
+
+                String json = response.body() != null ? response.body().string() : "{}";
+                Gson gson = new Gson();
+                TypeToken<Coche> typeToken = new TypeToken<Coche>() {
+                };
+
+                cliente.connectionPool().evictAll();
+                return gson.fromJson(json, typeToken.getType());
+            } else {
+
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText(errorMensaje);
+                    alert.setHeaderText(null);
+                    alert.showAndWait();
+                });
+
+                cliente.connectionPool().evictAll();
+                return null;
+            }
+        } catch (IOException e) {
+            cliente.connectionPool().evictAll();
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 }
