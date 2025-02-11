@@ -27,7 +27,7 @@ public class CocheService {
         Gson gson = new Gson();
         String json = gson.toJson(coche);
 
-        RequestBody body = RequestBody.create(json, MediaType.cget("application/json"));
+        RequestBody body = RequestBody.create(json, MediaType.get("application/json"));
 
         Request request = new Request.Builder()
                 .url("http://localhost:9001/api/coche")
